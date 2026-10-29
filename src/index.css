@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: "Cinzel", "Cormorant Garamond", serif;
+  
+  --color-ivory: #FAF8F5;
+  --color-ivory-warm: #F6F2EA;
+  --color-champagne: #F2EBE3;
+  --color-champagne-dark: #E4D8CC;
+  --color-charcoal: #131316;
+  --color-charcoal-light: #1E1E24;
+  --color-deep-black: #0A0A0C;
+  --color-gold-muted: #C5A880;
+  --color-gold-subtle: #8E7754;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #0A0A0C;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: #1C1917;
+    background-color: #FAF8F5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #131316;
+    color: #FAF8F5;
+  }
+}
+
+/* Luxury film grain overlay effect */
+.bg-grain {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.bg-grain-dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Subtle editorial scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0C;
+}
+::-webkit-scrollbar-thumb {
+  background: #2E2E36;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4A4A55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
