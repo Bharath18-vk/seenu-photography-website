@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { X, Play, Pause, Volume2, VolumeX, Film, Clock, Sliders, ArrowRight } from 'lucide-react';
+import { X, Play, Pause, Volume2, VolumeX, Film, Clock, Sliders, ArrowRight, Maximize2 } from 'lucide-react';
 import { FILM_CONCEPTS } from '../../data/portfolio';
 
 interface FilmModalProps {
@@ -17,87 +17,96 @@ export const FilmModal: React.FC<FilmModalProps> = ({
 }) => {
   const [selectedFilmId, setSelectedFilmId] = useState(initialFilmId);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTimeSec, setCurrentTimeSec] = useState(0);
-  const [isAudioActive, setIsAudioActive] = useState(false);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const oscillatorRef = useRef<OscillatorNode | null>(null);
-  const gainNodeRef = useRef<GainNode | null>(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const film = FILM_CONCEPTS.find((f) => f.id === selectedFilmId) || FILM_CONCEPTS[0];
 
-  // Duration in seconds (e.g. "04:12" -> 252)
-  const totalDurationSec = 252;
-
-  // Handle Play/Pause simulation
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (isPlaying && isOpen) {
-      interval = setInterval(() => {
-        setCurrentTimeSec((prev) => {
-          if (prev >= totalDurationSec) {
-            setIsPlaying(false);
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 1000);
+  const handleSelectFilm = (filmId: string) => {
+    setSelectedFilmId(filmId);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setVideoError(false);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.pause();
     }
-    return () => clearInterval(interval);
-  }, [isPlaying, isOpen, totalDurationSec]);
+  };
 
-  // Audio tone generation for calm acoustic ambient mood demo
-  const toggleAmbientAudio = () => {
-    try {
-      if (!isAudioActive) {
-        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+  // Sync isPlaying state with video element
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {
+          // In case of autoplay policy, mute first then play
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            setIsMuted(true);
+            videoRef.current.play().then(() => setIsPlaying(true));
+          }
+        });
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
 
-        // Warm, low ambient drone (C3 ~ 130.81Hz)
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(130.81, ctx.currentTime);
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    const newMute = !videoRef.current.muted;
+    videoRef.current.muted = newMute;
+    setIsMuted(newMute);
+  };
 
-        gain.gain.setValueAtTime(0.01, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.04, ctx.currentTime + 1.5);
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      setCurrentTime(videoRef.current.currentTime);
+    }
+  };
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
+    }
+  };
 
-        audioContextRef.current = ctx;
-        oscillatorRef.current = osc;
-        gainNodeRef.current = gain;
-        setIsAudioActive(true);
-      } else {
-        if (gainNodeRef.current && audioContextRef.current) {
-          gainNodeRef.current.gain.exponentialRampToValueAtTime(0.0001, audioContextRef.current.currentTime + 0.5);
-          setTimeout(() => {
-            audioContextRef.current?.close();
-            audioContextRef.current = null;
-            setIsAudioActive(false);
-          }, 500);
-        } else {
-          setIsAudioActive(false);
-        }
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = Number(e.target.value);
+    setCurrentTime(time);
+    if (videoRef.current) {
+      videoRef.current.currentTime = time;
+    }
+  };
+
+  const handleFullscreen = () => {
+    if (videoRef.current) {
+      if (videoRef.current.requestFullscreen) {
+        videoRef.current.requestFullscreen();
       }
-    } catch {
-      setIsAudioActive(false);
+    }
+  };
+
+  const handleChapterClick = (index: number) => {
+    if (videoRef.current && duration > 0) {
+      // Seek to proportional fraction of video duration
+      const seekTime = (duration / film.chapters.length) * index;
+      videoRef.current.currentTime = seekTime;
+      setCurrentTime(seekTime);
+      videoRef.current.play().then(() => setIsPlaying(true));
     }
   };
 
   const handleClose = useCallback(() => {
-    if (audioContextRef.current) {
-      try {
-        audioContextRef.current.close();
-      } catch {
-        // silent
-      }
-      audioContextRef.current = null;
+    if (videoRef.current) {
+      videoRef.current.pause();
     }
-    setIsAudioActive(false);
     setIsPlaying(false);
-    setCurrentTimeSec(0);
     onClose();
   }, [onClose]);
 
@@ -105,6 +114,9 @@ export const FilmModal: React.FC<FilmModalProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         handleClose();
+      } else if (e.key === ' ' && isOpen) {
+        e.preventDefault();
+        togglePlay();
       }
     };
     if (isOpen) {
@@ -122,8 +134,9 @@ export const FilmModal: React.FC<FilmModalProps> = ({
   if (!isOpen) return null;
 
   const formatTime = (secs: number) => {
+    if (isNaN(secs) || secs < 0) return '00:00';
     const m = Math.floor(secs / 60);
-    const s = secs % 60;
+    const s = Math.floor(secs % 60);
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   };
 
@@ -149,7 +162,7 @@ export const FilmModal: React.FC<FilmModalProps> = ({
               </span>
               <span className="text-white/20 hidden sm:inline">•</span>
               <span className="text-[11px] text-[#C5A880] tracking-wider uppercase font-mono hidden sm:inline">
-                Curated Reel Walkthrough
+                Playable 4K Master Video
               </span>
             </div>
 
@@ -162,16 +175,12 @@ export const FilmModal: React.FC<FilmModalProps> = ({
             </button>
           </div>
 
-          {/* Film Selectors */}
+          {/* Film Concept Selectors */}
           <div className="flex border-b border-white/10 bg-[#121216] overflow-x-auto scrollbar-none">
             {FILM_CONCEPTS.map((item) => (
               <button
                 key={item.id}
-                onClick={() => {
-                  setSelectedFilmId(item.id);
-                  setCurrentTimeSec(0);
-                  setIsPlaying(false);
-                }}
+                onClick={() => handleSelectFilm(item.id)}
                 className={`flex-1 min-w-[200px] px-5 py-3.5 text-left text-xs transition-colors border-r border-white/5 ${
                   selectedFilmId === item.id
                     ? 'bg-[#191920] border-b-2 border-b-[#C5A880] text-white font-medium'
@@ -188,91 +197,131 @@ export const FilmModal: React.FC<FilmModalProps> = ({
             ))}
           </div>
 
-          {/* Cinema Player Stage */}
-          <div className="relative aspect-[21/9] sm:aspect-[2.39/1] w-full bg-black overflow-hidden flex items-center justify-center">
-            {/* Cinematic Background Frame */}
-            <img
-              src={film.thumbnail}
-              alt={film.title}
-              className={`w-full h-full object-cover transition-all duration-700 ${
-                isPlaying ? 'scale-105 filter brightness-95' : 'brightness-75'
-              }`}
+          {/* Genuine Playable HTML5 Cinema Video Player Stage */}
+          <div className="relative aspect-[16/9] sm:aspect-[2.39/1] w-full bg-black overflow-hidden flex items-center justify-center group">
+            {/* Real HTML5 Video Element */}
+            <video
+              ref={videoRef}
+              key={film.videoUrl}
+              src={film.videoUrl}
+              poster={film.thumbnail}
+              playsInline
+              preload="metadata"
+              onTimeUpdate={handleTimeUpdate}
+              onLoadedMetadata={handleLoadedMetadata}
+              onEnded={() => setIsPlaying(false)}
+              onError={() => setVideoError(true)}
+              onClick={togglePlay}
+              className="w-full h-full object-cover cursor-pointer"
             />
 
-            {/* Letterbox Bars & Cinematic Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
-
-            {/* Center Play / Pause Indicator */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="pointer-events-auto p-4 md:p-6 rounded-full bg-black/60 hover:bg-[#C5A880] text-white hover:text-black border border-white/20 hover:border-[#C5A880] transition-all transform hover:scale-105 shadow-2xl focus:outline-none"
-                aria-label={isPlaying ? 'Pause film' : 'Play film'}
-              >
-                {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
-              </button>
-
-              <div className="mt-4 px-3 py-1 bg-black/70 border border-white/10 rounded-xs text-[10px] uppercase tracking-widest font-mono text-stone-300">
-                {isPlaying ? 'Playing Cinema Reel Preview' : 'Click to Play Reel Preview'}
+            {/* Fallback if error */}
+            {videoError && (
+              <div className="absolute inset-0 bg-stone-900 flex flex-col items-center justify-center p-6 text-center">
+                <p className="text-sm text-stone-300 font-sans">
+                  Video preview file currently loading. Click below to reload.
+                </p>
+                <button
+                  onClick={() => {
+                    setVideoError(false);
+                    videoRef.current?.load();
+                  }}
+                  className="mt-3 px-4 py-2 bg-[#C5A880] text-black text-xs font-mono uppercase"
+                >
+                  Reload Video
+                </button>
               </div>
-            </div>
+            )}
 
-            {/* On-Screen Watermark & Aspect Ratio Badge */}
+            {/* Big Center Play / Pause Indicator (shows when paused) */}
+            {!isPlaying && (
+              <div
+                onClick={togglePlay}
+                className="absolute inset-0 flex flex-col items-center justify-center cursor-pointer bg-black/40 hover:bg-black/30 transition-colors"
+              >
+                <button
+                  type="button"
+                  aria-label="Play wedding film video"
+                  className="p-5 md:p-6 rounded-full bg-black/70 hover:bg-[#C5A880] text-white hover:text-black border border-white/20 hover:border-[#C5A880] transition-all transform hover:scale-110 shadow-2xl focus:outline-none"
+                >
+                  <Play className="w-8 h-8 ml-1 fill-current" />
+                </button>
+
+                <div className="mt-4 px-3 py-1 bg-black/80 border border-white/10 rounded-xs text-[10px] uppercase tracking-widest font-mono text-stone-200">
+                  Click to Play Video
+                </div>
+              </div>
+            )}
+
+            {/* Top Watermark & Specs Overlay */}
             <div className="absolute top-4 left-6 pointer-events-none flex items-center gap-3">
               <span className="font-serif text-xs tracking-widest text-[#C5A880] uppercase drop-shadow">
                 SS CINEMA 4K
               </span>
-              <span className="text-[10px] font-mono text-stone-400 bg-black/60 px-2 py-0.5 border border-white/10">
+              <span className="text-[10px] font-mono text-stone-300 bg-black/70 px-2 py-0.5 border border-white/10">
                 {film.aspectRatio}
               </span>
             </div>
 
-            {/* Player Controls Bar */}
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/95 to-transparent p-4 sm:p-6 flex flex-col gap-2">
+            {/* Bottom Player Controls Bar */}
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-4 sm:p-6 flex flex-col gap-2">
               {/* Timeline Scrubber */}
               <div className="w-full flex items-center gap-3">
                 <input
                   type="range"
                   min={0}
-                  max={totalDurationSec}
-                  value={currentTimeSec}
-                  onChange={(e) => setCurrentTimeSec(Number(e.target.value))}
-                  className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#C5A880]"
+                  max={duration || 100}
+                  step={0.1}
+                  value={currentTime}
+                  onChange={handleSeek}
+                  className="w-full h-1.5 bg-white/25 rounded-lg appearance-none cursor-pointer accent-[#C5A880] hover:bg-white/40 transition-colors"
                   aria-label="Video timeline scrubber"
                 />
               </div>
 
-              <div className="flex items-center justify-between text-xs font-mono text-stone-400">
+              {/* Controls & Timecode */}
+              <div className="flex items-center justify-between text-xs font-mono text-stone-300">
                 <div className="flex items-center gap-4">
                   <button
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="hover:text-white transition-colors"
+                    onClick={togglePlay}
+                    className="p-1 hover:text-white transition-colors focus:outline-none"
+                    aria-label={isPlaying ? 'Pause video' : 'Play video'}
                   >
-                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
                   </button>
 
                   <button
-                    onClick={toggleAmbientAudio}
-                    className="flex items-center gap-1.5 hover:text-white transition-colors"
-                    title="Toggle ambient score demo"
+                    onClick={toggleMute}
+                    className="flex items-center gap-1.5 p-1 hover:text-white transition-colors focus:outline-none"
+                    aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
                   >
-                    {isAudioActive ? (
-                      <Volume2 className="w-4 h-4 text-[#C5A880]" />
+                    {isMuted ? (
+                      <VolumeX className="w-4 h-4 text-stone-400" />
                     ) : (
-                      <VolumeX className="w-4 h-4" />
+                      <Volume2 className="w-4 h-4 text-[#C5A880]" />
                     )}
                     <span className="text-[10px] uppercase hidden sm:inline">
-                      {isAudioActive ? 'Ambient Sound: Active' : 'Enable Ambient Score'}
+                      {isMuted ? 'Muted' : 'Sound On'}
                     </span>
                   </button>
 
-                  <span className="text-stone-300">
-                    {formatTime(currentTimeSec)} / {film.duration}
+                  <span className="text-stone-300 text-[11px]">
+                    {formatTime(currentTime)} / {formatTime(duration)}
                   </span>
                 </div>
 
-                <div className="text-[10px] text-stone-400 tracking-wider hidden sm:block">
-                  24 FPS • 4K DCI • MASTER REC.709
+                <div className="flex items-center gap-4">
+                  <div className="text-[10px] text-stone-400 tracking-wider hidden sm:block">
+                    24 FPS • 4K DCI • DIRECT MASTER
+                  </div>
+                  <button
+                    onClick={handleFullscreen}
+                    className="p-1 hover:text-white transition-colors focus:outline-none"
+                    aria-label="Fullscreen video"
+                    title="Fullscreen"
+                  >
+                    <Maximize2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -315,24 +364,21 @@ export const FilmModal: React.FC<FilmModalProps> = ({
               <div className="md:col-span-6 space-y-3">
                 <span className="text-[11px] uppercase tracking-widest font-mono text-stone-400 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-[#C5A880]" />
-                  Narrative Film Chapters
+                  Narrative Film Chapters (Click to Seek)
                 </span>
 
                 <div className="space-y-2">
                   {film.chapters.map((ch, idx) => (
                     <div
                       key={idx}
-                      onClick={() => {
-                        // calculate chapter time
-                        const parts = ch.time.split(':');
-                        const s = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-                        setCurrentTimeSec(s);
-                        setIsPlaying(true);
-                      }}
+                      onClick={() => handleChapterClick(idx)}
                       className="flex items-center justify-between p-2.5 rounded-xs bg-white/5 hover:bg-white/10 border border-white/5 cursor-pointer transition-colors"
                     >
                       <span className="text-xs text-stone-200 font-sans">{ch.title}</span>
-                      <span className="text-[10px] font-mono text-[#C5A880]">{ch.time}</span>
+                      <span className="text-[10px] font-mono text-[#C5A880] flex items-center gap-1">
+                        <Play className="w-2.5 h-2.5 fill-current" />
+                        {ch.time}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -364,11 +410,11 @@ export const FilmModal: React.FC<FilmModalProps> = ({
                   </div>
                 </div>
 
-                <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-stone-300 text-[11px] font-sans leading-relaxed mt-2 rounded-xs">
-                  <strong className="text-[#C5A880] block font-mono uppercase text-[10px] mb-0.5">
-                    Creative Note for Client Demo:
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-stone-300 text-[11px] font-sans leading-relaxed mt-2 rounded-xs">
+                  <strong className="text-emerald-400 block font-mono uppercase text-[10px] mb-0.5">
+                    Active Video Stream:
                   </strong>
-                  This interactive cinema console demonstrates the film portfolio presentation framework. SS STUDIO's authentic high-definition video master files can be linked here directly.
+                  This player actively streams full 1080p cinematic footage locally bundled with SS STUDIO’s portfolio specs.
                 </div>
               </div>
             </div>

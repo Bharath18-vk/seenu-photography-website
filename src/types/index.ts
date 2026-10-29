@@ -33,6 +33,7 @@ export interface FilmConcept {
   duration: string;
   aspectRatio: string;
   thumbnail: string;
+  videoUrl: string;
   category: string;
   logline: string;
   directorNotes: string;
