@@ -8,8 +8,7 @@ export const OurApproach: React.FC = () => {
       tagline: 'The quiet moments, the unscripted smiles and everything in between.',
       description:
         'We do not turn your wedding into a film set. By maintaining a discreet, observant presence, we allow tears to flow naturally, jokes to ripple across the room unprompted, and sacred rites to proceed with uninterrupted holiness.',
-      image:
-        'https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=1000&q=85',
+      image: '/candid-laugh.jpg',
       imageAlt: 'Candid unscripted bride laughing with genuine happiness',
       caption: 'FIG. 01 — Unscripted candid expression during family blessings.',
     },
@@ -19,8 +18,7 @@ export const OurApproach: React.FC = () => {
       tagline: 'Photographs that feel authentic today and meaningful decades from now.',
       description:
         'Trends and aggressive color filters fade quickly. Our color science honors true skin tones, deep black richness, and organic natural light, ensuring that your wedding albums will look just as regal fifty years from today as they do tomorrow.',
-      image:
-        'https://images.unsplash.com/photo-1544077960-604201fe74bc?auto=format&fit=crop&w=1000&q=85',
+      image: '/bride-portrait.jpg',
       imageAlt: 'Timeless intimate bridal portrait with natural light',
       caption: 'FIG. 02 — Archival color grading preserving authentic textures and skin tones.',
     },
@@ -30,8 +28,7 @@ export const OurApproach: React.FC = () => {
       tagline: 'A cohesive visual story that brings the emotions of your celebration together.',
       description:
         'A wedding is not a random collection of 1,000 pretty stills; it is a three-act emotional narrative with rising anticipation, profound sacred vows, and ecstatic communal celebration. We sequence every collection like a fine-art monograph.',
-      image:
-        'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=85',
+      image: '/sunset-couple.jpg',
       imageAlt: 'Harmonious couple walking into sunset',
       caption: 'FIG. 03 — Narrative flow carrying you through dawn, twilight, and starlight.',
     },
@@ -42,7 +39,7 @@ export const OurApproach: React.FC = () => {
       <div className="max-w-7xl mx-auto space-y-20">
         {/* Header */}
         <div className="max-w-3xl space-y-4">
-          <div className="text-[10px] md:text-xs font-mono uppercase tracking-[0.25em] text-[#8E7754]">
+          <div className="text-[10px] md:text-xs font-mono uppercase tracking-[0.25em] text-[#C7A77B] font-semibold">
             OUR GUIDING PRINCIPLES
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-stone-900 font-light tracking-tight leading-tight">
@@ -72,7 +69,7 @@ export const OurApproach: React.FC = () => {
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <span className="font-serif text-4xl md:text-5xl text-[#8E7754] font-light">
+                    <span className="font-serif text-4xl md:text-5xl text-[#C7A77B] font-light">
                       {principle.number}
                     </span>
                     <span className="h-[1px] w-12 bg-stone-300" />
@@ -111,7 +108,7 @@ export const OurApproach: React.FC = () => {
                     </div>
                     <div className="mt-3 px-2 flex items-center justify-between text-[10px] font-mono text-stone-500 uppercase tracking-widest">
                       <span>{principle.caption}</span>
-                      <span className="text-[#8E7754]">SS STUDIO ARCHIVE</span>
+                      <span className="text-[#C7A77B]">SEENU PHOTOGRAPHY ARCHIVE</span>
                     </div>
                   </div>
                 </div>

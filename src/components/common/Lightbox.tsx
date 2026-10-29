@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { PhotoItem } from '../../types';
+import { SITE_CONFIG } from '../../config/site';
 
 interface LightboxProps {
   isOpen: boolean;
@@ -55,17 +56,17 @@ export const Lightbox: React.FC<LightboxProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label="Photo Lightbox"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm transition-opacity duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#191816]/95 backdrop-blur-md transition-opacity duration-300"
       onClick={onClose}
     >
       {/* Top Bar */}
       <div
-        className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-5 text-white/80"
+        className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-5 text-white/90"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3">
-          <span className="font-serif text-lg tracking-widest text-[#C5A880] uppercase">
-            SS STUDIO
+          <span className="font-serif text-lg tracking-widest text-[#C7A77B] uppercase">
+            {SITE_CONFIG.brandName}
           </span>
           {storyTitle && (
             <>
@@ -84,7 +85,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
           <button
             onClick={onClose}
             aria-label="Close Lightbox (Esc)"
-            className="p-2 text-white/70 hover:text-white rounded-full transition-colors hover:bg-white/10 focus:outline-none focus:ring-1 focus:ring-[#C5A880]"
+            className="p-2 text-white/70 hover:text-white rounded-full transition-colors hover:bg-white/10 focus:outline-none focus:ring-1 focus:ring-[#C7A77B] cursor-pointer"
           >
             <X className="w-6 h-6" />
           </button>
@@ -121,7 +122,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
               onNavigate((currentIndex - 1 + photos.length) % photos.length);
             }}
             aria-label="Previous image (Left Arrow)"
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-3 text-white/60 hover:text-white transition-all bg-black/40 hover:bg-black/80 rounded-full border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#C5A880]"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white transition-all bg-black/50 hover:bg-black/90 rounded-full border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#C7A77B] cursor-pointer"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
@@ -132,7 +133,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
               onNavigate((currentIndex + 1) % photos.length);
             }}
             aria-label="Next image (Right Arrow)"
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 p-3 text-white/60 hover:text-white transition-all bg-black/40 hover:bg-black/80 rounded-full border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#C5A880]"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 p-3 text-white/70 hover:text-white transition-all bg-black/50 hover:bg-black/90 rounded-full border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#C7A77B] cursor-pointer"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -140,7 +141,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
       )}
 
       {/* Bottom Hint */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] tracking-widest uppercase text-stone-500 font-mono hidden md:block">
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] tracking-widest uppercase text-stone-400 font-mono hidden md:block">
         Use ← and → keys to navigate • Esc to exit
       </div>
     </div>

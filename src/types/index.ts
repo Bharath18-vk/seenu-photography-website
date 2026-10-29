@@ -3,8 +3,10 @@ export interface PhotoItem {
   url: string;
   alt: string;
   caption?: string;
+  category?: string;
   orientation?: 'portrait' | 'landscape' | 'square';
   aspectRatio?: string;
+  photographerCredit?: string;
 }
 
 export interface Story {
@@ -16,7 +18,7 @@ export interface Story {
   location: string;
   dateTag: string;
   heroImage: string;
-  aspectRatio: string; // for varied editorial grid layout
+  aspectRatio: string;
   curatedCount: number;
   narrative: string;
   excerpt: string;
@@ -50,8 +52,10 @@ export interface ServiceItem {
   id: string;
   number: string;
   title: string;
+  tagline: string;
   shortDescription: string;
   fullDescription: string;
+  image: string;
   coveragePoints: string[];
   deliverables: string[];
   bestSuitedFor: string;
@@ -70,10 +74,21 @@ export interface TestimonialItem {
 
 export interface InquiryFormData {
   name: string;
+  partnerName?: string;
   phone: string;
   email?: string;
   date: string;
   location: string;
-  celebrationType: string;
-  message: string;
+  service: string;
+  celebrationType?: string;
+  message?: string;
+  preferredContact?: 'whatsapp' | 'phone' | 'email';
+}
+
+export interface SocialPhotoItem {
+  id: string;
+  url: string;
+  alt: string;
+  caption: string;
+  location?: string;
 }

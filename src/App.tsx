@@ -1,40 +1,47 @@
 import { useState } from 'react';
 import { Header } from './components/common/Header';
 import { Hero } from './components/sections/Hero';
-import { EditorialIntro } from './components/sections/EditorialIntro';
-import { SignatureStories } from './components/sections/SignatureStories';
+import { TrustStrip } from './components/sections/TrustStrip';
+import { BrandStory } from './components/sections/BrandStory';
+import { Portfolio } from './components/sections/Portfolio';
+import { FeaturedStory } from './components/sections/FeaturedStory';
+import { ServicesSection } from './components/sections/ServicesSection';
+import { Experience } from './components/sections/Experience';
 import { CinematicFilm } from './components/sections/CinematicFilm';
 import { OurApproach } from './components/sections/OurApproach';
 import { EmotionalImageBreak } from './components/sections/EmotionalImageBreak';
-import { ClientExperience } from './components/sections/ClientExperience';
-import { ServicesSection } from './components/sections/ServicesSection';
-import { BookingSection } from './components/sections/BookingSection';
+import { Testimonials } from './components/sections/Testimonials';
+import { SocialGallery } from './components/sections/SocialGallery';
+import { EnquirySection } from './components/sections/EnquirySection';
 import { Footer } from './components/sections/Footer';
 import { Lightbox } from './components/common/Lightbox';
 import { StoryModal } from './components/common/StoryModal';
 import { FilmModal } from './components/common/FilmModal';
+import { WhatsAppButton } from './components/common/WhatsAppButton';
 import { DemoPanel } from './components/common/DemoPanel';
 import type { Story, PhotoItem } from './types';
 
 export function App() {
-  // Story Modal State
+  // Story Modal State (for full monograph albums)
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
 
-  // Lightbox State
+  // Lightbox State (for all clickable images across portfolio & albums)
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxPhotos, setLightboxPhotos] = useState<PhotoItem[]>([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [lightboxStoryTitle, setLightboxStoryTitle] = useState('');
 
-  // Film Modal State
+  // Film Modal State (for 4K cinema console)
   const [filmModalOpen, setFilmModalOpen] = useState(false);
   const [selectedFilmId, setSelectedFilmId] = useState('film-1');
 
-  // Booking Form Preset
-  const [selectedServicePreset, setSelectedServicePreset] = useState<string>('Wedding Photography & Cinematography');
+  // Booking Form Preset Service
+  const [selectedServicePreset, setSelectedServicePreset] = useState<string>(
+    'Wedding Photography & Cinematography'
+  );
 
-  // Handlers
+  // Modal Handlers
   const handleOpenStory = (story: Story) => {
     setSelectedStory(story);
     setIsStoryModalOpen(true);
@@ -64,18 +71,19 @@ export function App() {
     setFilmModalOpen(false);
   };
 
-  const scrollToInquiry = (serviceName?: string) => {
+  // Smooth Scroll Navigation Helpers
+  const scrollToContact = (serviceName?: string) => {
     if (serviceName) {
       setSelectedServicePreset(serviceName);
     }
-    const elem = document.getElementById('inquire');
+    const elem = document.getElementById('contact');
     if (elem) {
       elem.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const scrollToStories = () => {
-    const elem = document.getElementById('stories');
+  const scrollToWork = () => {
+    const elem = document.getElementById('our-work');
     if (elem) {
       elem.scrollIntoView({ behavior: 'smooth' });
     }
@@ -89,59 +97,74 @@ export function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#FAF8F5] text-stone-900 selection:bg-stone-900 selection:text-white">
-      {/* Navigation Header */}
-      <Header onOpenInquiry={scrollToInquiry} />
+    <div className="relative min-h-screen bg-[#F8F5EF] text-[#191816] selection:bg-[#191816] selection:text-[#F8F5EF]">
+      {/* 1. Transparent Floating Navigation */}
+      <Header onOpenInquiry={scrollToContact} />
 
       {/* Main Content Sections */}
       <main>
-        {/* Section A — Immersive Hero */}
+        {/* 2. Hero Section — The Most Important Screen */}
         <Hero
-          onExploreStories={scrollToStories}
-          onTalkWedding={() => scrollToInquiry()}
+          onExploreWork={scrollToWork}
+          onTalkWedding={() => scrollToContact()}
         />
 
-        {/* Section B — Editorial Introduction */}
-        <EditorialIntro onDiscoverApproach={scrollToApproach} />
+        {/* 3. Minimal Trust Strip (Verified Google 4.6★ / 62 reviews + 4 pillars) */}
+        <TrustStrip />
 
-        {/* Section C — Signature Wedding Stories (Visual Centerpiece) */}
-        <SignatureStories
+        {/* 4. Brand Story — More Than Photographs */}
+        <BrandStory onDiscoverApproach={scrollToApproach} />
+
+        {/* 5. Portfolio — Stories We've Had the Joy of Capturing */}
+        <Portfolio
+          onOpenLightbox={handleOpenLightbox}
+          onOpenInquiry={scrollToContact}
+        />
+
+        {/* 6. Featured Wedding Story — Heirloom Album Spread */}
+        <FeaturedStory
           onSelectStory={handleOpenStory}
-          onOpenInquiry={scrollToInquiry}
+          onOpenLightbox={handleOpenLightbox}
         />
 
-        {/* Section D — The Cinematic Film Moment */}
+        {/* 7. Four Editorial Service Blocks */}
+        <ServicesSection onSelectServiceForInquiry={scrollToContact} />
+
+        {/* 8. The Experience — 3-Step Process */}
+        <Experience />
+
+        {/* 9. 4K Cinematic Wedding Film Showcase */}
         <CinematicFilm onOpenFilmShowcase={handleOpenFilmShowcase} />
 
-        {/* Section E — Our Approach */}
+        {/* 10. Our Approach — Observe, Preserve, Tell */}
         <OurApproach />
 
-        {/* Section F — Full-Width Emotional Image Break */}
+        {/* 11. Emotional Image Break */}
         <EmotionalImageBreak />
 
-        {/* Section G — Client Experience */}
-        <ClientExperience />
+        {/* 12. Testimonials — Words of Trust (Editable Demo Placeholders) */}
+        <Testimonials />
 
-        {/* Section H — Services */}
-        <ServicesSection onSelectServiceForInquiry={scrollToInquiry} />
+        {/* 13. Social Journal Gallery — Little Moments. Lasting Memories. */}
+        <SocialGallery />
 
-        {/* Section I — Booking Call To Action */}
-        <BookingSection
+        {/* 14. High-Conversion Enquiry Form with WhatsApp Integration */}
+        <EnquirySection
           key={selectedServicePreset}
           selectedServicePreset={selectedServicePreset}
         />
       </main>
 
-      {/* Section J — Premium Footer */}
+      {/* 15. Premium Editorial Footer */}
       <Footer />
 
-      {/* Modals & Overlays */}
+      {/* Modals & Fullscreen Overlays */}
       <StoryModal
         story={selectedStory}
         isOpen={isStoryModalOpen}
         onClose={handleCloseStory}
         onOpenLightbox={handleOpenLightbox}
-        onInquire={(category) => scrollToInquiry(category)}
+        onInquire={(category) => scrollToContact(category)}
       />
 
       <Lightbox
@@ -157,10 +180,11 @@ export function App() {
         isOpen={filmModalOpen}
         onClose={handleCloseFilmShowcase}
         initialFilmId={selectedFilmId}
-        onInquire={(service) => scrollToInquiry(service)}
+        onInquire={(service) => scrollToContact(service)}
       />
 
-      {/* Floating Client Demo Panel */}
+      {/* Floating Elements: WhatsApp Action on Right, Client Demo Info on Left */}
+      <WhatsAppButton />
       <DemoPanel />
     </div>
   );

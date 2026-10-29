@@ -51,14 +51,14 @@ export const StoryModal: React.FC<StoryModalProps> = ({
     >
       <div className="min-h-screen px-4 md:px-8 py-12 flex items-center justify-center">
         <div
-          className="relative w-full max-w-5xl bg-[#121214] border border-white/10 text-stone-200 overflow-hidden shadow-2xl rounded-sm my-8"
+          className="relative w-full max-w-5xl bg-[#191816] border border-[#C7A77B]/30 text-stone-200 overflow-hidden shadow-2xl rounded-sm my-8"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
           <button
             onClick={onClose}
             aria-label="Close story view (Esc)"
-            className="absolute top-5 right-5 z-20 p-2 text-stone-400 hover:text-white bg-black/60 hover:bg-black/80 rounded-full border border-white/10 transition-colors focus:outline-none focus:ring-1 focus:ring-[#C5A880]"
+            className="absolute top-5 right-5 z-20 p-2 text-stone-400 hover:text-white bg-black/60 hover:bg-black/80 rounded-full border border-white/10 transition-colors focus:outline-none focus:ring-1 focus:ring-[#C7A77B] cursor-pointer"
           >
             <X className="w-6 h-6" />
           </button>
@@ -70,20 +70,20 @@ export const StoryModal: React.FC<StoryModalProps> = ({
               alt={story.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#121214] via-[#121214]/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#191816] via-[#191816]/50 to-transparent" />
 
             {/* Banner Content */}
             <div className="absolute bottom-8 left-6 md:left-12 right-6 md:right-12">
-              <div className="flex flex-wrap items-center gap-3 text-xs tracking-widest uppercase font-mono text-[#C5A880] mb-3">
-                <span className="px-2.5 py-0.5 border border-[#C5A880]/30 bg-[#C5A880]/10">
+              <div className="flex flex-wrap items-center gap-3 text-xs tracking-widest uppercase font-mono text-[#C7A77B] mb-3">
+                <span className="px-2.5 py-0.5 border border-[#C7A77B]/30 bg-[#C7A77B]/10">
                   {story.category}
                 </span>
-                <span className="flex items-center gap-1 text-stone-400">
-                  <MapPin className="w-3.5 h-3.5" />
+                <span className="flex items-center gap-1 text-stone-300">
+                  <MapPin className="w-3.5 h-3.5 text-[#C7A77B]" />
                   {story.location}
                 </span>
-                <span className="flex items-center gap-1 text-stone-400">
-                  <Calendar className="w-3.5 h-3.5" />
+                <span className="flex items-center gap-1 text-stone-300">
+                  <Calendar className="w-3.5 h-3.5 text-[#C7A77B]" />
                   {story.dateTag}
                 </span>
               </div>
@@ -105,10 +105,10 @@ export const StoryModal: React.FC<StoryModalProps> = ({
             {/* Excerpt & Narrative */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-b border-white/10 pb-10">
               <div className="md:col-span-4">
-                <span className="text-[11px] uppercase tracking-widest text-stone-400 font-mono block mb-2">
+                <span className="text-[11px] uppercase tracking-widest text-[#C7A77B] font-mono block mb-2 font-semibold">
                   The Editorial Vision
                 </span>
-                <p className="font-serif italic text-lg md:text-xl text-[#C5A880] leading-relaxed">
+                <p className="font-serif italic text-lg md:text-xl text-[#F8F5EF] leading-relaxed">
                   "{story.excerpt}"
                 </p>
 
@@ -139,13 +139,13 @@ export const StoryModal: React.FC<StoryModalProps> = ({
 
                 {/* Highlights List */}
                 <div className="mt-6 pt-6 border-t border-white/10">
-                  <span className="text-[11px] uppercase tracking-widest text-stone-400 font-mono block mb-3">
+                  <span className="text-[11px] uppercase tracking-widest text-[#C7A77B] font-mono block mb-3 font-semibold">
                     Curatorial Highlights
                   </span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs md:text-sm text-stone-300 font-light">
                     {story.highlights.map((highlight, index) => (
                       <li key={index} className="flex items-start gap-2">
-                        <span className="text-[#C5A880] mt-0.5">•</span>
+                        <span className="text-[#C7A77B] mt-0.5">•</span>
                         <span>{highlight}</span>
                       </li>
                     ))}
@@ -162,7 +162,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
                     Curated Photographic Frames
                   </h3>
                   <p className="text-xs text-stone-400 font-sans font-light">
-                    Click any frame to view in full-screen gallery ({story.gallery.length} photos)
+                    Click any frame to view in full-screen lightbox ({story.gallery.length} photos)
                   </p>
                 </div>
               </div>
@@ -185,7 +185,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
                         <span className="text-xs text-stone-200 line-clamp-1 font-sans">
                           {photo.caption || photo.alt}
                         </span>
-                        <Expand className="w-4 h-4 text-[#C5A880] shrink-0 ml-2" />
+                        <Expand className="w-4 h-4 text-[#C7A77B] shrink-0 ml-2" />
                       </div>
                     </div>
                   </div>
@@ -194,7 +194,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
             </div>
 
             {/* Inquire Footer */}
-            <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-stone-900/40 p-6 rounded-sm">
+            <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/5 p-6 rounded-sm">
               <div>
                 <h4 className="font-serif text-xl text-white">
                   Planning a celebration in this vision?
@@ -209,7 +209,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
                   onClose();
                   onInquire(story.category);
                 }}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C5A880] text-black text-xs font-semibold uppercase tracking-widest hover:bg-[#D4AF37] transition-colors rounded-xs focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C5A880]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C7A77B] text-[#191816] text-xs font-semibold uppercase tracking-widest hover:bg-[#D9C19D] transition-colors rounded-xs focus:outline-none focus:ring-2 focus:ring-[#C7A77B] cursor-pointer"
               >
                 Inquire For Your Wedding
                 <ArrowRight className="w-4 h-4" />

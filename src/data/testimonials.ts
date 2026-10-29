@@ -1,34 +1,45 @@
 import type { TestimonialItem } from '../types';
 
+/**
+ * TESTIMONIALS DATA (DEMO PLACEHOLDERS)
+ * 
+ * Per project specifications: Never fabricate real customer names, claims, or reviews.
+ * The entries below are clearly marked illustrative placeholders demonstrating the
+ * editorial typographic layout. Replace with Seenu Photography's verified Google reviews
+ * and client notes prior to final launch.
+ */
 export const CLIENT_EXPERIENCE_SAMPLES: TestimonialItem[] = [
   {
-    id: 't-1',
-    quote: 'Looking through our wedding gallery felt like watching poetry unfold. They didn’t just photograph how our mandap looked; they captured the exact second my mother’s eyes filled with tears as I took my first phera. We are eternally grateful.',
-    couple: 'Ananya & Kabir',
+    id: 'demo-review-1',
+    quote:
+      'Looking through our wedding frames felt like watching poetry unfold. They did not merely photograph how our mandap looked; they captured the exact second my mother wiped away a tear during our pheras. Truly unforgettable work.',
+    couple: 'Ananya & Kabir [Demo Placeholder]',
     weddingLocation: 'Udaipur, Rajasthan',
-    celebrationType: '3-Day Royal Heritage Celebration',
+    celebrationType: 'Royal Heritage Wedding',
     highlightYear: 'Winter Celebration',
-    photograph: 'https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?auto=format&fit=crop&w=800&q=80',
-    isDemoSample: true
+    photograph: '/hero-wedding.jpg',
+    isDemoSample: true,
   },
   {
-    id: 't-2',
-    quote: 'We were nervous about feeling stiff in front of cameras. The SS Studio team moved like old friends in the room — unobtrusive, remarkably calm, and deeply perceptive. The photographs feel like memories, not poses.',
-    couple: 'Rhea & Dev',
+    id: 'demo-review-2',
+    quote:
+      'We were hesitant about posing or feeling stiff before cameras. The team moved with such quiet discretion, warm calm, and natural ease. The resulting portraits feel like authentic memories, not choreographed poses.',
+    couple: 'Rhea & Dev [Demo Placeholder]',
     weddingLocation: 'Kumarakom, Kerala',
-    celebrationType: 'Intimate Backwater Courtyard Wedding',
+    celebrationType: 'Intimate Courtyard Ceremony',
     highlightYear: 'Autumn Gathering',
-    photograph: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
-    isDemoSample: true
+    photograph: '/candid-ceremony.jpg',
+    isDemoSample: true,
   },
   {
-    id: 't-3',
-    quote: 'The cinematic film brought our entire family to tears. The sound of our father’s laughter, the quiet prayers before the procession, the explosion of music on the sangeet stage — everything is preserved forever in pure 4K cinema.',
-    couple: 'Meera & Aarav',
+    id: 'demo-review-3',
+    quote:
+      'The wedding film brought our grandparents and entire family to tears. The sound of our father’s blessings, the laughter from the sangeet, and the quiet glances between us are preserved forever with remarkable cinematic artistry.',
+    couple: 'Meera & Aarav [Demo Placeholder]',
     weddingLocation: 'Heritage Haveli, Delhi NCR',
     celebrationType: 'Traditional Anand Karaj & Reception',
     highlightYear: 'Spring Season',
-    photograph: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80',
-    isDemoSample: true
-  }
+    photograph: '/bride-portrait.jpg',
+    isDemoSample: true,
+  },
 ];

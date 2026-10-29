@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowRight, Plus, Minus, CheckCircle2 } from 'lucide-react';
+import { MessageCircle, Plus, Minus, CheckCircle2 } from 'lucide-react';
 import { PROPOSED_SERVICES } from '../../data/services';
+import { SITE_CONFIG } from '../../config/site';
 
 interface ServicesSectionProps {
   onSelectServiceForInquiry: (serviceName: string) => void;
@@ -16,121 +17,145 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   };
 
   return (
-    <section id="services" className="bg-[#FAF8F5] text-stone-900 py-24 md:py-36 px-6 md:px-12 lg:px-20 border-b border-stone-200">
+    <section
+      id="services"
+      className="bg-[#F8F5EF] text-[#191816] py-24 md:py-36 px-6 md:px-12 lg:px-20 border-b border-[#191816]/10"
+    >
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-stone-300 pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#191816]/15 pb-8">
           <div>
-            <div className="flex items-center gap-2 text-[10px] md:text-xs font-mono uppercase tracking-[0.25em] text-[#8E7754] mb-3">
-              <span>PROPOSED OFFERINGS</span>
+            <div className="flex items-center gap-2 text-[10px] md:text-xs font-mono uppercase tracking-[0.25em] text-[#C7A77B] mb-3">
+              <span>STUDIO COMMISSIONS</span>
               <span>•</span>
-              <span>CONCEPT FRAMEWORK</span>
+              <span>FOUR EDITORIAL DISCIPLINES</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-stone-900 font-light tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#191816] font-light tracking-tight">
               Bespoke Studio Services
             </h2>
           </div>
 
-          <div className="max-w-md text-stone-600 font-sans font-light text-xs md:text-sm leading-relaxed">
-            Every commission is customized around the timeline, geography, and traditions of your celebration.
+          <div className="max-w-md text-[#191816]/70 font-sans font-light text-xs md:text-sm leading-relaxed">
+            Every celebration is unique. We shape our coverage around your ceremonial timeline, traditions, and family rhythm.
           </div>
         </div>
 
-        {/* Services List: Clean Editorial Rows with Expandable Scope */}
-        <div className="divide-y divide-stone-300 border-b border-stone-300">
+        {/* Four Editorial Service Blocks */}
+        <div className="space-y-10">
           {PROPOSED_SERVICES.map((service) => {
             const isExpanded = expandedServiceId === service.id;
 
             return (
               <div
                 key={service.id}
-                className="py-8 md:py-12 group transition-colors duration-300"
+                className="bg-white/80 border border-[#191816]/10 shadow-sm hover:shadow-md transition-all duration-300 rounded-xs overflow-hidden"
               >
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-baseline">
-                  {/* Number & Title */}
-                  <div className="lg:col-span-5 flex items-baseline gap-4">
-                    <span className="font-mono text-xs text-[#8E7754] font-medium tracking-widest">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center p-6 md:p-8">
+                  {/* Service Number & Photographic Thumbnail */}
+                  <div className="lg:col-span-4 flex items-center gap-5">
+                    <span className="font-serif text-3xl md:text-4xl text-[#C7A77B] font-light">
                       {service.number}
                     </span>
+                    <div className="relative w-28 h-20 sm:w-32 sm:h-22 shrink-0 overflow-hidden rounded-xs bg-stone-200">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
                     <div>
-                      <h3 className="font-serif text-2xl sm:text-3xl text-stone-900 group-hover:text-[#8E7754] transition-colors tracking-tight">
+                      <h3 className="font-serif text-xl sm:text-2xl text-[#191816] tracking-tight">
                         {service.title}
                       </h3>
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-stone-500 mt-1 block">
-                        {service.bestSuitedFor}
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#191816]/50">
+                        Editorial Craft
                       </span>
                     </div>
                   </div>
 
-                  {/* Short Description */}
+                  {/* Concise Exact Description as Instructed */}
                   <div className="lg:col-span-5">
-                    <p className="text-stone-600 font-sans font-light text-sm md:text-base leading-relaxed">
+                    <p className="font-serif italic text-base sm:text-lg text-[#191816]/90 leading-snug">
+                      "{service.tagline}"
+                    </p>
+                    <p className="text-[#191816]/65 font-sans font-light text-xs md:text-sm leading-relaxed mt-1">
                       {service.shortDescription}
                     </p>
                   </div>
 
-                  {/* Understated Action Controls */}
-                  <div className="lg:col-span-2 flex items-center justify-between lg:justify-end gap-4">
+                  {/* CTAs: Details + "Discuss Your Requirements" (leads to WhatsApp) */}
+                  <div className="lg:col-span-3 flex flex-wrap items-center justify-start lg:justify-end gap-3 pt-2 lg:pt-0">
                     <button
                       onClick={() => toggleExpand(service.id)}
-                      className="text-xs font-mono uppercase tracking-widest text-stone-600 hover:text-stone-900 flex items-center gap-1 focus:outline-none"
+                      className="text-xs font-mono uppercase tracking-wider text-[#191816]/70 hover:text-[#191816] flex items-center gap-1 py-2 px-3 border border-stone-200 hover:border-stone-400 rounded-xs transition-colors cursor-pointer"
                       aria-expanded={isExpanded}
                     >
-                      <span>{isExpanded ? 'Less' : 'Details'}</span>
+                      <span>{isExpanded ? 'Less' : 'Scope'}</span>
                       {isExpanded ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                     </button>
 
-                    <button
-                      onClick={() => onSelectServiceForInquiry(service.title)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-[#8E7754] hover:text-stone-950 transition-colors focus:outline-none group/btn"
+                    {/* Required "Discuss Your Requirements" CTA leading to WhatsApp */}
+                    <a
+                      href={SITE_CONFIG.createWhatsAppUrl({ service: service.title })}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#191816] bg-[#C7A77B] hover:bg-[#D9C19D] transition-colors rounded-xs shadow-sm"
                     >
-                      <span className="border-b border-[#8E7754] pb-0.5 group-hover/btn:border-stone-950">
-                        Inquire
-                      </span>
-                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-1" />
-                    </button>
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>Discuss Your Requirements</span>
+                    </a>
                   </div>
                 </div>
 
-                {/* Expanded Details Drawer */}
+                {/* Expandable Details Drawer */}
                 {isExpanded && (
-                  <div className="mt-8 pt-8 border-t border-stone-200 grid grid-cols-1 md:grid-cols-12 gap-8 text-xs font-sans animate-fadeIn">
+                  <div className="border-t border-[#191816]/10 bg-[#FAF8F5] p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 text-xs font-sans animate-fadeIn">
                     <div className="md:col-span-6 space-y-3">
-                      <span className="font-mono uppercase text-stone-500 tracking-widest block text-[10px]">
-                        Detailed Coverage Scope
+                      <span className="font-mono uppercase text-[#C7A77B] tracking-widest block text-[10px] font-semibold">
+                        Coverage & Philosophy
                       </span>
-                      <p className="text-stone-700 leading-relaxed text-sm font-light">
+                      <p className="text-[#191816]/80 leading-relaxed text-sm font-light">
                         {service.fullDescription}
                       </p>
                       <ul className="space-y-1.5 pt-2">
                         {service.coveragePoints.map((point, i) => (
-                          <li key={i} className="flex items-start gap-2 text-stone-600">
-                            <span className="text-[#8E7754]">•</span>
+                          <li key={i} className="flex items-start gap-2 text-[#191816]/70">
+                            <span className="text-[#C7A77B] mt-0.5">•</span>
                             <span>{point}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    <div className="md:col-span-6 space-y-3 bg-stone-100/70 p-5 rounded-xs">
-                      <span className="font-mono uppercase text-stone-500 tracking-widest block text-[10px]">
+                    <div className="md:col-span-6 space-y-3 bg-white p-5 rounded-xs border border-stone-200">
+                      <span className="font-mono uppercase text-[#C7A77B] tracking-widest block text-[10px] font-semibold">
                         Curated Deliverables
                       </span>
                       <ul className="space-y-2">
                         {service.deliverables.map((del, i) => (
-                          <li key={i} className="flex items-start gap-2 text-stone-700">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#8E7754] shrink-0 mt-0.5" />
+                          <li key={i} className="flex items-start gap-2 text-[#191816]/80">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#C7A77B] shrink-0 mt-0.5" />
                             <span>{del}</span>
                           </li>
                         ))}
                       </ul>
-                      <div className="pt-3">
+                      <div className="pt-3 flex flex-wrap gap-2">
                         <button
                           onClick={() => onSelectServiceForInquiry(service.title)}
-                          className="px-4 py-2 bg-stone-900 text-white text-[11px] font-mono uppercase tracking-widest hover:bg-[#8E7754] transition-colors"
+                          className="px-4 py-2 bg-[#191816] text-[#F8F5EF] text-[11px] font-mono uppercase tracking-widest hover:bg-[#C7A77B] hover:text-[#191816] transition-colors cursor-pointer"
                         >
-                          Select {service.title} for Inquiry →
+                          Book via Form →
                         </button>
+                        <a
+                          href={SITE_CONFIG.createWhatsAppUrl({ service: service.title })}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-4 py-2 border border-[#C7A77B] text-[#191816] text-[11px] font-mono uppercase tracking-widest hover:bg-[#C7A77B] transition-colors flex items-center gap-1.5"
+                        >
+                          <MessageCircle className="w-3 h-3" />
+                          <span>WhatsApp Quote</span>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -140,13 +165,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           })}
         </div>
 
-        {/* Note on bespoke pricing & verification */}
-        <div className="bg-stone-100 p-6 rounded-xs flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 font-sans font-light">
+        {/* Note on bespoke pricing per Section 8: No invented package pricing! */}
+        <div className="bg-[#E9E1D6]/50 p-6 rounded-xs flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#191816]/70 font-sans font-light">
           <p>
-            * These services represent proposed offerings for the website demo. SS STUDIO will customize specific deliverables, coverage hours, and investment collections based on client requirements.
+            * We do not publish rigid package rates because every wedding celebration carries unique multi-day schedules, guest numbers, and travel logistics. Custom investment estimates are provided following a tailored discussion.
           </p>
-          <span className="font-mono uppercase tracking-wider text-stone-700 shrink-0">
-            Investment on Request
+          <span className="font-mono uppercase tracking-wider text-[#191816] font-medium shrink-0">
+            Investment Upon Request
           </span>
         </div>
       </div>

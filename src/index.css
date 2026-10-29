@@ -2,65 +2,84 @@
 
 @theme {
   --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-display: "Cinzel", "Cormorant Garamond", serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", "Manrope", system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
   
-  --color-ivory: #FAF8F5;
-  --color-ivory-warm: #F6F2EA;
-  --color-champagne: #F2EBE3;
-  --color-champagne-dark: #E4D8CC;
-  --color-charcoal: #131316;
-  --color-charcoal-light: #1E1E24;
-  --color-deep-black: #0A0A0C;
-  --color-gold-muted: #C5A880;
-  --color-gold-subtle: #8E7754;
+  /* Master Color Palette */
+  --color-ivory: #F8F5EF;
+  --color-charcoal: #191816;
+  --color-champagne: #C7A77B;
+  --color-beige: #E9E1D6;
+  --color-white: #FFFFFF;
+  
+  /* Tonal accents */
+  --color-charcoal-light: #242220;
+  --color-charcoal-subtle: #302D2A;
+  --color-champagne-light: #D9C19D;
+  --color-champagne-dark: #A88656;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    background-color: #0A0A0C;
+    background-color: #191816;
   }
 
   body {
     font-family: var(--font-sans);
-    color: #1C1917;
-    background-color: #FAF8F5;
+    color: #191816;
+    background-color: #F8F5EF;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background-color: #131316;
-    color: #FAF8F5;
+    background-color: #191816;
+    color: #F8F5EF;
   }
 }
 
-/* Luxury film grain overlay effect */
+/* Subtle luxury editorial film grain */
 .bg-grain {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+  background-image: radial-gradient(rgba(25, 24, 22, 0.035) 1px, transparent 0);
   background-size: 24px 24px;
 }
 
 .bg-grain-dark {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  background-image: radial-gradient(rgba(248, 245, 239, 0.04) 1px, transparent 0);
   background-size: 24px 24px;
 }
 
-/* Subtle editorial scrollbar */
+/* Editorial scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0C;
+  background: #191816;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2E2E36;
+  background: #3A3734;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4A4A55;
+  background: #C7A77B;
+}
+
+/* Subtle fade in keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

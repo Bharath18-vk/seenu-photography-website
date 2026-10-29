@@ -33,7 +33,7 @@ export const SignatureStories: React.FC<SignatureStoriesProps> = ({
         {/* Section Header with Magazine Layout */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-stone-300 pb-8">
           <div>
-            <div className="flex items-center gap-2 text-[10px] md:text-xs font-mono uppercase tracking-[0.25em] text-[#8E7754] mb-3">
+            <div className="flex items-center gap-2 text-[10px] md:text-xs font-mono uppercase tracking-[0.25em] text-[#C7A77B] mb-3">
               <span>PORTFOLIO COLLECTION</span>
               <span>•</span>
               <span>DEMO SHOWCASE</span>
@@ -109,7 +109,7 @@ export const SignatureStories: React.FC<SignatureStoriesProps> = ({
 
                   {/* Explore Overlay Button */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="px-5 py-2.5 bg-[#C5A880] text-black text-xs font-semibold tracking-widest uppercase flex items-center gap-2 shadow-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <div className="px-5 py-2.5 bg-[#C7A77B] text-black text-xs font-semibold tracking-widest uppercase flex items-center gap-2 shadow-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
                       <Eye className="w-3.5 h-3.5" />
                       <span>Explore Story</span>
                     </div>
@@ -120,7 +120,7 @@ export const SignatureStories: React.FC<SignatureStoriesProps> = ({
                     <span className="text-[10px] font-mono tracking-wider text-stone-300">
                       {story.location}
                     </span>
-                    <span className="text-[10px] font-mono text-[#C5A880]">
+                    <span className="text-[10px] font-mono text-[#C7A77B]">
                       {story.gallery.length} Curated Plates
                     </span>
                   </div>
@@ -155,11 +155,11 @@ export const SignatureStories: React.FC<SignatureStoriesProps> = ({
         {/* Bottom Banner Note */}
         <div className="pt-10 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <p className="text-xs text-stone-500 font-sans font-light">
-            * All featured stories and locations are illustrative editorial concepts for the SS STUDIO client proposal.
+            * All featured stories and locations are illustrative editorial concepts for the Seenu Photography client proposal.
           </p>
           <button
             onClick={() => onOpenInquiry('Custom Wedding Collection')}
-            className="text-xs font-mono uppercase tracking-widest text-[#8E7754] hover:text-stone-900 underline focus:outline-none"
+            className="text-xs font-mono uppercase tracking-widest text-[#C7A77B] hover:text-stone-900 underline focus:outline-none cursor-pointer"
           >
             Commission a bespoke story for your celebration →
           </button>
